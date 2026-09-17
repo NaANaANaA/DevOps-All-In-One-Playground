@@ -29,7 +29,6 @@ See [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) for attribution details
 
 ```bash
 cd templates/alberto-realworld/observability
-cp .env.example .env
 export GRAFANA_ADMIN_PASSWORD="$(openssl rand -hex 16)"
 docker compose up -d
 ```

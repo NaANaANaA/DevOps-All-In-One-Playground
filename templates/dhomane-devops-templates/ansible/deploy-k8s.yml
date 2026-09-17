@@ -17,7 +17,14 @@
     - name: Render manifests locally
       ansible.builtin.command:
         cmd: kubectl kustomize {{ manifests_dir }}
+      register: rendered_manifests
       changed_when: false
+
+    - name: Ensure rendered manifests do not contain Namespace objects
+      ansible.builtin.assert:
+        that:
+          - "'kind: Namespace' not in rendered_manifests.stdout"
+        fail_msg: "Use a namespace-free kustomization because this playbook creates the namespace separately."
 
     - name: Ensure namespace exists
       ansible.builtin.command:
@@ -26,13 +33,12 @@
       changed_when: false
 
     - name: Apply namespace manifest
-      ansible.builtin.shell: |
-        set -euo pipefail
-        printf '%s' '{{ namespace_yaml.stdout }}' | kubectl apply -f -
+      ansible.builtin.command: kubectl apply -f -
       args:
-        executable: /bin/bash
+        stdin: "{{ namespace_yaml.stdout }}"
       changed_when: false
 
     - name: Deploy application manifests
-      ansible.builtin.command:
-        cmd: kubectl apply -n {{ deploy_namespace }} -k {{ manifests_dir }}
+      ansible.builtin.command: kubectl apply -n {{ deploy_namespace }} -f -
+      args:
+        stdin: "{{ rendered_manifests.stdout }}"

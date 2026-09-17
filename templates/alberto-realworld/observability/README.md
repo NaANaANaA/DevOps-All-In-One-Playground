@@ -1,11 +1,10 @@
 # Observability starter
 
-A ready-to-run local observability stack using Prometheus, Grafana, and Node Exporter.
+A ready-to-run local observability stack using Prometheus, Grafana, and Node Exporter. Copy `.env.example` to `.env` if you want a persisted local credential file; otherwise export the password for the current shell session.
 
 ## Start
 
 ```bash
-cp .env.example .env
 export GRAFANA_ADMIN_PASSWORD="$(openssl rand -hex 16)"
 docker compose up -d
 ```

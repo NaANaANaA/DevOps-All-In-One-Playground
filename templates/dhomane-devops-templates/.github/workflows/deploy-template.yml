@@ -12,7 +12,7 @@ on:
         required: true
         type: string
       manifests_path:
-        description: Path to the Kubernetes manifests directory
+        description: Path to a namespace-free Kubernetes kustomization
         required: true
         type: string
       deployment_name:
@@ -55,17 +55,27 @@ jobs:
           printf '%s' "${{ secrets.KUBE_CONFIG }}" > "$HOME/.kube/config"
           chmod 600 "$HOME/.kube/config"
 
+      - name: Render manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl kustomize "${{ inputs.manifests_path }}" > /tmp/rendered-manifests.yaml
+          if grep -q '^kind: Namespace$' /tmp/rendered-manifests.yaml; then
+            echo "manifests_path must exclude Namespace objects because this workflow creates the namespace separately" >&2
+            exit 1
+          fi
+
       - name: Validate manifests
         shell: bash
         run: |
           set -euo pipefail
-          kubectl apply --dry-run=client -n "${{ inputs.namespace }}" -k "${{ inputs.manifests_path }}"
+          kubectl apply --dry-run=client -n "${{ inputs.namespace }}" -f /tmp/rendered-manifests.yaml
 
       - name: Deploy manifests
         shell: bash
         run: |
           set -euo pipefail
           kubectl create namespace "${{ inputs.namespace }}" --dry-run=client -o yaml | kubectl apply -f -
-          kubectl apply -n "${{ inputs.namespace }}" -k "${{ inputs.manifests_path }}"
+          kubectl apply -n "${{ inputs.namespace }}" -f /tmp/rendered-manifests.yaml
           kubectl -n "${{ inputs.namespace }}" set image deployment/${{ inputs.deployment_name }} "${{ inputs.container_name }}=${{ inputs.image }}"
           kubectl -n "${{ inputs.namespace }}" rollout status deployment/${{ inputs.deployment_name }} --timeout=180s

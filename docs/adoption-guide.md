@@ -59,9 +59,9 @@ For observability:
 
 ```bash
 cd templates/alberto-realworld/observability
-cp .env.example .env
 export GRAFANA_ADMIN_PASSWORD="$(openssl rand -hex 16)"
 docker compose up -d
+# Optional: copy .env.example to .env for a persistent local password file
 curl -fsSL http://localhost:9090/-/ready
 curl -fsSL http://localhost:9100/metrics | head
 ```
@@ -73,6 +73,7 @@ cd templates/alberto-realworld/observability
 docker compose down -v
 cd ../../..
 kubectl delete -k templates/citadel-production/kubernetes/app-starter --ignore-not-found
+kubectl delete namespace example-app --ignore-not-found
 ```
 
 If Terraform was used with the example local resource, remove generated files and run `terraform destroy` in the consumer repository.
