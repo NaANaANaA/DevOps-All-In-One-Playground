@@ -17,6 +17,7 @@ cp -R templates/citadel-production/kubernetes/app-starter /path/to/your-repo/k8s
 cp -R templates/dhomane-devops-templates/.github/workflows /path/to/your-repo/.github/
 cp -R scripts /path/to/your-repo/scripts
 cp -R templates/dhomane-devops-templates/terraform/modules/app-starter /path/to/your-repo/terraform/modules/app-starter
+# If you also adopt the Ansible helper, copy your manifests to k8s/app or pass -e manifests_dir=...
 ```
 
 Keep `THIRD_PARTY_NOTICES.md` references or replicate the relevant attribution in the destination repository when you retain inspired content.
@@ -29,7 +30,7 @@ Update these values before first deployment:
 - Kubernetes namespace `example-app`
 - Ingress host `app.example.test`
 - Terraform variables in `example.auto.tfvars`
-- GitHub workflow environment names and registry image tags
+- GitHub workflow environment names, registry image tags, and CI `DOCKERFILE_PATH`/`BUILD_CONTEXT` values
 
 ## 4. Configure secrets safely
 

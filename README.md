@@ -49,7 +49,7 @@ kubectl kustomize templates/citadel-production/kubernetes/app-starter > /tmp/exa
 
 ### 4. Reuse the GitHub Actions starter
 
-Copy the files from `templates/dhomane-devops-templates/.github/workflows/` into another repository's `.github/workflows/` directory, copy `scripts/` or replace the referenced validation commands, and adjust the inputs and image placeholders.
+Copy the files from `templates/dhomane-devops-templates/.github/workflows/` into another repository's `.github/workflows/` directory, copy `scripts/` or replace the referenced validation commands, and adjust the image, Dockerfile path, build context, and deployment inputs.
 
 ## Prerequisites
 
