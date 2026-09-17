@@ -15,13 +15,24 @@ on:
         description: Path to the Kubernetes manifests directory
         required: true
         type: string
+      deployment_name:
+        description: Deployment resource name to patch and watch
+        required: true
+        type: string
+      container_name:
+        description: Container name within the deployment to update
+        required: true
+        type: string
       image:
-        description: Container image reference to inject or audit during deployment
+        description: Container image reference to inject during deployment
         required: true
         type: string
     secrets:
       KUBE_CONFIG:
         required: true
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -56,4 +67,5 @@ jobs:
           set -euo pipefail
           kubectl create namespace "${{ inputs.namespace }}" --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -k "${{ inputs.manifests_path }}"
-          kubectl -n "${{ inputs.namespace }}" rollout status deployment/example-app --timeout=180s
+          kubectl -n "${{ inputs.namespace }}" set image deployment/${{ inputs.deployment_name }} "${{ inputs.container_name }}=${{ inputs.image }}"
+          kubectl -n "${{ inputs.namespace }}" rollout status deployment/${{ inputs.deployment_name }} --timeout=180s

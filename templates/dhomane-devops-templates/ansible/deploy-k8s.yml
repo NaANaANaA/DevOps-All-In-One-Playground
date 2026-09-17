@@ -14,9 +14,9 @@
       ansible.builtin.command: kubectl config current-context
       changed_when: false
 
-    - name: Validate manifests with dry-run
+    - name: Render manifests locally
       ansible.builtin.command:
-        cmd: kubectl apply --dry-run=client -k {{ manifests_dir }}
+        cmd: kubectl kustomize {{ manifests_dir }}
       changed_when: false
 
     - name: Ensure namespace exists

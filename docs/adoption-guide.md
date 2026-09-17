@@ -52,7 +52,7 @@ For Kubernetes, inject secrets separately with Sealed Secrets, External Secrets,
 ./scripts/validate-kubernetes.sh
 kubectl kustomize templates/citadel-production/kubernetes/app-starter > /tmp/example-app-manifests.yaml
 ansible-playbook -i templates/dhomane-devops-templates/ansible/inventory.ini \
-  templates/dhomane-devops-templates/ansible/deploy-k8s.yml --check
+  templates/dhomane-devops-templates/ansible/deploy-k8s.yml --syntax-check
 ```
 
 For observability:
