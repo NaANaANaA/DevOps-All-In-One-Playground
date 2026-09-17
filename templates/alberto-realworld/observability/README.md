@@ -1,6 +1,6 @@
 # Observability starter
 
-A ready-to-run local observability stack using Prometheus, Grafana, and Node Exporter. Copy `.env.example` to `.env` if you want a persisted local credential file; otherwise export the password for the current shell session.
+A ready-to-run local observability stack using Prometheus, Grafana, and Node Exporter. If you want file-based credentials, copy `.env.example` to `.env` before running `docker compose`; otherwise export the password for the current shell session.
 
 ## Start
 

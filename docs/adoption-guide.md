@@ -72,7 +72,7 @@ curl -fsSL http://localhost:9100/metrics | head
 cd templates/alberto-realworld/observability
 docker compose down -v
 cd ../../..
-kubectl delete -k templates/citadel-production/kubernetes/app-starter --ignore-not-found
+kubectl delete -n example-app -k templates/citadel-production/kubernetes/app-starter --ignore-not-found
 kubectl delete namespace example-app --ignore-not-found
 ```
 

@@ -81,7 +81,7 @@ Copy the files from `templates/dhomane-devops-templates/.github/workflows/` into
 - **Kubernetes:** Namespace, ConfigMap, Deployment, Service, Ingress, HPA, PDB, NetworkPolicy, and health probes
 - **GitHub Actions:** Validation CI and a reusable deployment workflow template with no embedded secrets
 - **Terraform:** Provider-neutral starter module scaffold using safe placeholders and optional local output generation
-- **Ansible:** Local prerequisite validation plus `kubectl apply -k` deployment helper
+- **Ansible:** Local prerequisite validation plus namespace creation, manifest rendering, and `kubectl apply` deployment helper
 
 ## Adoption flow
 
