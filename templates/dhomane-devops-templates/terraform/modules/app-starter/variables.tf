@@ -23,13 +23,13 @@ variable "common_tags" {
 }
 
 variable "write_example_file" {
-  description = "When true, emit a small local file containing rendered metadata."
+  description = "When true, emit a small local file containing rendered metadata if metadata_output_path is set."
   type        = bool
   default     = false
 }
 
 variable "metadata_output_path" {
-  description = "Optional output file path written from the root module when write_example_file is enabled."
+  description = "Optional explicit output file path used when write_example_file is enabled."
   type        = string
   default     = null
 }

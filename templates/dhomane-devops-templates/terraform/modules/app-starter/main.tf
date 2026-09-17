@@ -11,7 +11,7 @@ locals {
 }
 
 resource "local_file" "metadata" {
-  count    = var.write_example_file ? 1 : 0
-  filename = coalesce(var.metadata_output_path, "${path.root}/rendered-${var.application_name}.json")
+  count    = var.write_example_file && var.metadata_output_path != null ? 1 : 0
+  filename = var.metadata_output_path
   content  = jsonencode(local.labels)
 }
