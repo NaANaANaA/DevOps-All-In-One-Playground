@@ -8,7 +8,7 @@ if ! command -v kubectl >/dev/null 2>&1; then
 fi
 
 rendered=$(kubectl kustomize "$REPO_ROOT/templates/citadel-production/kubernetes/app-starter")
-if grep -q '^kind: Namespace$' <<<"$rendered"; then
+if grep -Eq '^[[:space:]]*kind:[[:space:]]*Namespace[[:space:]]*$' <<<"$rendered"; then
   echo "kustomization must stay namespace-free because deployment helpers create the namespace separately" >&2
   exit 1
 fi

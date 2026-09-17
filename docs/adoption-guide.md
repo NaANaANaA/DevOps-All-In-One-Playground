@@ -28,6 +28,7 @@ Update these values before first deployment:
 
 - Image references such as `ghcr.io/example-org/example-app:stable`
 - Kubernetes namespace `example-app`
+- NetworkPolicy egress destinations and ports for your real dependencies
 - Ingress host `app.example.test`
 - Terraform variables in `example.auto.tfvars`
 - GitHub workflow environment names, registry image tags, and CI `DOCKERFILE_PATH`/`BUILD_CONTEXT` values

@@ -27,3 +27,9 @@ variable "write_example_file" {
   type        = bool
   default     = false
 }
+
+variable "metadata_output_path" {
+  description = "Optional output file path written from the root module when write_example_file is enabled."
+  type        = string
+  default     = null
+}

@@ -23,7 +23,7 @@
     - name: Ensure rendered manifests do not contain Namespace objects
       ansible.builtin.assert:
         that:
-          - "'kind: Namespace' not in rendered_manifests.stdout"
+          - rendered_manifests.stdout | regex_search('(?m)^\s*kind:\s*Namespace\s*$') == none
         fail_msg: "Use a namespace-free kustomization because this playbook creates the namespace separately."
 
     - name: Ensure namespace exists

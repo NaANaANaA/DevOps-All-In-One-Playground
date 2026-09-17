@@ -60,7 +60,7 @@ jobs:
         run: |
           set -euo pipefail
           kubectl kustomize "${{ inputs.manifests_path }}" > /tmp/rendered-manifests.yaml
-          if grep -q '^kind: Namespace$' /tmp/rendered-manifests.yaml; then
+          if grep -Eq '^[[:space:]]*kind:[[:space:]]*Namespace[[:space:]]*$' /tmp/rendered-manifests.yaml; then
             echo "manifests_path must exclude Namespace objects because this workflow creates the namespace separately" >&2
             exit 1
           fi
