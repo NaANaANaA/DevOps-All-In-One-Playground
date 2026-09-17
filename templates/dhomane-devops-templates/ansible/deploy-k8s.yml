@@ -1,0 +1,38 @@
+---
+- name: Validate prerequisites and deploy Kubernetes starter
+  hosts: local
+  gather_facts: false
+  vars:
+    deploy_namespace: example-app
+    manifests_dir: "{{ playbook_dir }}/../../citadel-production/kubernetes/app-starter"
+  tasks:
+    - name: Check kubectl is available
+      ansible.builtin.command: kubectl version --client
+      changed_when: false
+
+    - name: Check current kubectl context
+      ansible.builtin.command: kubectl config current-context
+      changed_when: false
+
+    - name: Validate manifests with dry-run
+      ansible.builtin.command:
+        cmd: kubectl apply --dry-run=client -k {{ manifests_dir }}
+      changed_when: false
+
+    - name: Ensure namespace exists
+      ansible.builtin.command:
+        cmd: kubectl create namespace {{ deploy_namespace }} --dry-run=client -o yaml
+      register: namespace_yaml
+      changed_when: false
+
+    - name: Apply namespace manifest
+      ansible.builtin.shell: |
+        set -euo pipefail
+        printf '%s' '{{ namespace_yaml.stdout }}' | kubectl apply -f -
+      args:
+        executable: /bin/bash
+      changed_when: false
+
+    - name: Deploy application manifests
+      ansible.builtin.command:
+        cmd: kubectl apply -k {{ manifests_dir }}

@@ -1,0 +1,59 @@
+name: Reusable Deploy Template
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Deployment environment name
+        required: true
+        type: string
+      namespace:
+        description: Kubernetes namespace to deploy into
+        required: true
+        type: string
+      manifests_path:
+        description: Path to the Kubernetes manifests directory
+        required: true
+        type: string
+      image:
+        description: Container image reference to inject or audit during deployment
+        required: true
+        type: string
+    secrets:
+      KUBE_CONFIG:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.31.0'
+
+      - name: Configure kubeconfig
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.kube"
+          printf '%s' "${{ secrets.KUBE_CONFIG }}" > "$HOME/.kube/config"
+          chmod 600 "$HOME/.kube/config"
+
+      - name: Validate manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl apply --dry-run=client -k "${{ inputs.manifests_path }}"
+
+      - name: Deploy manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl create namespace "${{ inputs.namespace }}" --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -k "${{ inputs.manifests_path }}"
+          kubectl -n "${{ inputs.namespace }}" rollout status deployment/example-app --timeout=180s
