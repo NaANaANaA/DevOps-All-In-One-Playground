@@ -2,7 +2,6 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: example-app
-  namespace: example-app
 spec:
   minAvailable: 1
   selector:

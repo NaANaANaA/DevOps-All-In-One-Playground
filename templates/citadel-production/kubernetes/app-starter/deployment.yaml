@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-app
-  namespace: example-app
 spec:
   replicas: 2
   revisionHistoryLimit: 3
@@ -37,7 +36,6 @@ spec:
             capabilities:
               drop:
                 - ALL
-            readOnlyRootFilesystem: true
             runAsNonRoot: true
           livenessProbe:
             httpGet:

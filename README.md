@@ -29,12 +29,14 @@ See [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md) for attribution details
 
 ```bash
 cd templates/alberto-realworld/observability
+cp .env.example .env
+export GRAFANA_ADMIN_PASSWORD="$(openssl rand -hex 16)"
 docker compose up -d
 ```
 
 Then open:
 
-- Grafana: <http://localhost:3000> (`admin` / `admin`)
+- Grafana: <http://localhost:3000> (`admin` unless overridden by `GRAFANA_ADMIN_USER` / your exported `GRAFANA_ADMIN_PASSWORD`)
 - Prometheus: <http://localhost:9090>
 - Node Exporter metrics: <http://localhost:9100/metrics>
 

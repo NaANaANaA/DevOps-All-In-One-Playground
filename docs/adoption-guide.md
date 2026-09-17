@@ -59,6 +59,8 @@ For observability:
 
 ```bash
 cd templates/alberto-realworld/observability
+cp .env.example .env
+export GRAFANA_ADMIN_PASSWORD="$(openssl rand -hex 16)"
 docker compose up -d
 curl -fsSL http://localhost:9090/-/ready
 curl -fsSL http://localhost:9100/metrics | head

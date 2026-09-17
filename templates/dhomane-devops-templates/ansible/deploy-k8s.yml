@@ -35,4 +35,4 @@
 
     - name: Deploy application manifests
       ansible.builtin.command:
-        cmd: kubectl apply -k {{ manifests_dir }}
+        cmd: kubectl apply -n {{ deploy_namespace }} -k {{ manifests_dir }}

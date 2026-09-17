@@ -59,13 +59,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          kubectl apply --dry-run=client -k "${{ inputs.manifests_path }}"
+          kubectl apply --dry-run=client -n "${{ inputs.namespace }}" -k "${{ inputs.manifests_path }}"
 
       - name: Deploy manifests
         shell: bash
         run: |
           set -euo pipefail
           kubectl create namespace "${{ inputs.namespace }}" --dry-run=client -o yaml | kubectl apply -f -
-          kubectl apply -k "${{ inputs.manifests_path }}"
+          kubectl apply -n "${{ inputs.namespace }}" -k "${{ inputs.manifests_path }}"
           kubectl -n "${{ inputs.namespace }}" set image deployment/${{ inputs.deployment_name }} "${{ inputs.container_name }}=${{ inputs.image }}"
           kubectl -n "${{ inputs.namespace }}" rollout status deployment/${{ inputs.deployment_name }} --timeout=180s
