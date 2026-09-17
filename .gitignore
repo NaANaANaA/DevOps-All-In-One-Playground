@@ -1,0 +1,10 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.retry
+*.swp
+*.swo
+.DS_Store
+*.log
+rendered-*.json
