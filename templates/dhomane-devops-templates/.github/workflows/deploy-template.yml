@@ -65,6 +65,12 @@ jobs:
             exit 1
           fi
 
+      - name: Ensure namespace exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl create namespace "${{ inputs.namespace }}" --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Validate manifests
         shell: bash
         run: |
@@ -75,7 +81,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          kubectl create namespace "${{ inputs.namespace }}" --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -n "${{ inputs.namespace }}" -f /tmp/rendered-manifests.yaml
           kubectl -n "${{ inputs.namespace }}" set image deployment/${{ inputs.deployment_name }} "${{ inputs.container_name }}=${{ inputs.image }}"
           kubectl -n "${{ inputs.namespace }}" rollout status deployment/${{ inputs.deployment_name }} --timeout=180s
